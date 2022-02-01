@@ -99,7 +99,7 @@ class LimeImageExplainer(object):
     explained."""
 
     def __init__(self, kernel_width=.25, kernel=None, verbose=False,
-                 feature_selection='auto', random_state=None, model_type = None):
+                 feature_selection='auto', random_state=None, model_type=None ):
         """Init function.
 
         Args:
@@ -136,7 +136,7 @@ class LimeImageExplainer(object):
         self.EfficientNetB0_layer = EfficientNetB0(weights = "imagenet", include_top = True, input_shape = self.input_image_shape)
         self.EfficientNetB0_model = models.Model(self.EfficientNetB0_layer.input, self.EfficientNetB0_layer.layers[-3].output)
 
-    def explain_instance(self, image, classifier_fn, labels=(1,),
+    def explain_instance(self, image, text=None, classifier_fn, labels=(1,),
                          hide_color=None,
                          top_labels=5, num_features=100000, num_samples=1000,
                          batch_size=10,
@@ -205,7 +205,7 @@ class LimeImageExplainer(object):
 
         top = labels
 
-        data, labels = self.data_labels(image, fudged_image, segments,
+        data, labels = self.data_labels(image, fudged_image, text, segments,
                                         classifier_fn, num_samples,
                                         batch_size=batch_size,
                                         progress_bar=progress_bar)
@@ -234,6 +234,7 @@ class LimeImageExplainer(object):
     def data_labels(self,
                     image,
                     fudged_image,
+                    text,
                     segments,
                     classifier_fn,
                     num_samples,
