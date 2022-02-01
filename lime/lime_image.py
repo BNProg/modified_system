@@ -11,7 +11,7 @@ from skimage.color import gray2rgb
 from tqdm.auto import tqdm
 
 from tensorflow.keras.applications import EfficientNetB0
-from tensorflow.keras import layers, models, utils
+from tensorflow.keras import models
 
 
 from . import lime_base
@@ -128,6 +128,12 @@ class LimeImageExplainer(object):
         self.random_state = check_random_state(random_state)
         self.feature_selection = feature_selection
         self.base = lime_base.LimeBase(kernel_fn, verbose, random_state=self.random_state)
+        self.image_height = 224
+        self.image_width = 224
+        self.image_channels = 3
+        self.input_image_shape = (self.image_height, self.image_width, self.image_channels)
+        self.EfficientNetB0_layer = EfficientNetB0(weights = "imagenet", include_top = True, input_shape = self.input_image_shape)
+        self.EfficientNetB0_model = models.Model(self.EfficientNetB0_layer.input, self.EfficientNetB0_layer.layers[-3].output)
 
     def explain_instance(self, image, classifier_fn, labels=(1,),
                          hide_color=None,
