@@ -10,6 +10,9 @@ from sklearn.utils import check_random_state
 from skimage.color import gray2rgb
 from tqdm.auto import tqdm
 
+from tensorflow.keras.applications import EfficientNetB0
+from tensorflow.keras import layers, models, utils
+
 
 from . import lime_base
 from .wrappers.scikit_image import SegmentationAlgorithm
