@@ -136,7 +136,7 @@ class LimeImageExplainer(object):
         self.EfficientNetB0_layer = EfficientNetB0(weights = "imagenet", include_top = True, input_shape = self.input_image_shape)
         self.EfficientNetB0_model = models.Model(self.EfficientNetB0_layer.input, self.EfficientNetB0_layer.layers[-3].output)
 
-    def explain_instance(self, image, text=None, classifier_fn, labels=(1,),
+    def explain_instance(self, image, classifier_fn, labels=(1,),
                          hide_color=None,
                          top_labels=5, num_features=100000, num_samples=1000,
                          batch_size=10,
@@ -144,7 +144,8 @@ class LimeImageExplainer(object):
                          distance_metric='cosine',
                          model_regressor=None,
                          random_seed=None,
-                         progress_bar=True):
+                         progress_bar=True,
+                        text=None):
         """Generates explanations for a prediction.
 
         First, we generate neighborhood data by randomly perturbing features
