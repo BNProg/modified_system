@@ -278,8 +278,15 @@ class LimeImageExplainer(object):
                     preds = classifier_fn(np.array(imgs))
                     labels.extend(preds)
                     imgs = []
+                else:
+                    preds = classifier_fn([input_1, input_2])
+                    labels.extend(preds)
+                    imgs = [] 
         if len(imgs) > 0:
                 if self.model_type is None:
                     preds = classifier_fn(np.array(imgs))
+                    labels.extend(preds)
+                else:
+                    preds = classifier_fn([input_1, input_2])
                     labels.extend(preds)
         return data, np.array(labels)
