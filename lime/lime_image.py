@@ -128,6 +128,7 @@ class LimeImageExplainer(object):
         self.random_state = check_random_state(random_state)
         self.feature_selection = feature_selection
         self.base = lime_base.LimeBase(kernel_fn, verbose, random_state=self.random_state)
+        self.model_type = model_type
         self.image_height = 224
         self.image_width = 224
         self.image_channels = 3
