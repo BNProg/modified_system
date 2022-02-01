@@ -99,7 +99,7 @@ class LimeImageExplainer(object):
     explained."""
 
     def __init__(self, kernel_width=.25, kernel=None, verbose=False,
-                 feature_selection='auto', random_state=None, model_type = "single"):
+                 feature_selection='auto', random_state=None, model_type = None):
         """Init function.
 
         Args:
@@ -273,12 +273,12 @@ class LimeImageExplainer(object):
             temp[mask] = fudged_image[mask]
             imgs.append(temp)
             if len(imgs) == batch_size:
-                if self.model_type == "single":
+                if self.model_type is None:
                     preds = classifier_fn(np.array(imgs))
                     labels.extend(preds)
                     imgs = []
         if len(imgs) > 0:
-                if self.model_type == "single":
+                if self.model_type is None:
                     preds = classifier_fn(np.array(imgs))
                     labels.extend(preds)
         return data, np.array(labels)
