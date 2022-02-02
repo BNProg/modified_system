@@ -290,7 +290,9 @@ class LimeImageExplainer(object):
                     imgs = []
                 else:
                     self.image_sequences = np.array(imgs)
-                    preds = classifier_fn(self.image_data) 
+                    model_input_1 = self.generate_input_1_data(np.array(imgs)):
+                    model_input_2 = self.process_model_input_2_data(np.array(imgs), text)
+                    preds = classifier_fn([model_input_1, model_input_2]) 
                     #preds = classifier_fn([input_1, input_2])
                     labels.extend(preds)
                     imgs = [] 
@@ -302,7 +304,9 @@ class LimeImageExplainer(object):
                     labels.extend(preds)
                 else:
                     self.image_sequences = np.array(imgs)
-                    preds = classifier_fn(self.image_data)
+                    model_input_1 = self.generate_input_1_data(np.array(imgs)):
+                    model_input_2 = self.process_model_input_2_data(np.array(imgs), text)
+                    preds = classifier_fn([model_input_1, model_input_2]) 
                     #preds = classifier_fn([input_1, input_2])
                     labels.extend(preds)
         return data, np.array(labels)
@@ -351,3 +355,10 @@ class LimeImageExplainer(object):
         EfficientNetB0_model_output = EfficientNetB0_model_output.numpy()
         EfficientNetB0_model_output = np.squeeze(np.asarray(EfficientNetB0_model_output))
         return EfficientNetB0_model_output
+    
+      def process_model_input_2_data(image_collection, text_data):
+        images_number = image_collection.shape[0]
+        processed_text_data = np.zeros((images_number, text_data.shape[0]))
+        for text_data_index in range(images_number):
+            processed_text_data[text_data_index, ...] = text_data
+        return processed_text_data   
