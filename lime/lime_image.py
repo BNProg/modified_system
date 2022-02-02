@@ -318,6 +318,7 @@ class LimeImageExplainer(object):
             rgb_image_url = "/content/drive/MyDrive/" + "image_" + str(image_data_index)
             rgb_image_url = rgb_image_url + ".jpg"
             image_path_to_save_image_data = rgb_image_url
+            image_data = image_collection[image_data_index]
             cv2.imwrite(image_path_to_save_image_data, image_data)
             # Resize and save rgb image
             normal_image_rgb_cv2 = cv2.imread(rgb_image_url)
