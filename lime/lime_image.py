@@ -299,30 +299,31 @@ class LimeImageExplainer(object):
                     #preds = classifier_fn([input_1, input_2])
                     labels.extend(preds)
         return data, np.array(labels)
-  def generate_input_1_data(self, image):
-    # Resize and save rgb image
-    normal_image_rgb_cv2 = cv2.imread(rgb_image_url)
-    resized_normal_image_rgb_cv2 = cv2.resize(normal_image_rgb_cv2, (image_width, image_height))
-    cv2.imwrite(rgb_image_url, resized_normal_image_rgb_cv2)
-    # Read rgb image using cv2 and plt libraries
-    normal_image_rgb_cv2 = cv2.imread(rgb_image_url)
-    normal_image_rgb_plt = Image.open(rgb_image_url)
-    # Generate and save reduced quality rgb image
-    image_quality = 95
-    image_path_to_save_reduced_quality_normal_image_rgb = rgb_image_url[:-4] + ".jpg"
-    cv2.imwrite(image_path_to_save_reduced_quality_normal_image_rgb, normal_image_rgb_cv2, [int(cv2.IMWRITE_JPEG_QUALITY), image_quality])
-    # Generate ela image
-    reduced_quality_normal_image_rgb = Image.open(rgb_image_url[:-4] + ".jpg")
-    ela_image = ImageChops.difference(normal_image_rgb_plt, reduced_quality_normal_image_rgb)
-    minimum_and_maximum_pixel_values_of_each_image_channel = ela_image.getextrema()
-    maximum_image_pixel_value = max([maximum_image_channel_pixel_value[1] for maximum_image_channel_pixel_value in minimum_and_maximum_pixel_values_of_each_image_channel])
-    if maximum_image_pixel_value == 0:
-        maximum_image_pixel_value = 1
-    brightness_amplification_factor = 3
-    maximum_brightness_value = 255.0
-    image_brightness_enhancement_factor = (maximum_brightness_value / maximum_image_pixel_value) * brightness_amplification_factor
-    enhanced_ela_image = ImageEnhance.Brightness(ela_image).enhance(image_brightness_enhancement_factor)
-    # Save and read ela image
-    enhanced_ela_image.save(rgb_image_url[:-4] + ".jpg")
-    enhanced_ela_image = cv2.imread(rgb_image_url[:-4] + ".jpg")
-    return enhanced_ela_image
+    
+    def generate_input_1_data(self, image):
+        # Resize and save rgb image
+        normal_image_rgb_cv2 = cv2.imread(rgb_image_url)
+        resized_normal_image_rgb_cv2 = cv2.resize(normal_image_rgb_cv2, (image_width, image_height))
+        cv2.imwrite(rgb_image_url, resized_normal_image_rgb_cv2)
+        # Read rgb image using cv2 and plt libraries
+        normal_image_rgb_cv2 = cv2.imread(rgb_image_url)
+        normal_image_rgb_plt = Image.open(rgb_image_url)
+        # Generate and save reduced quality rgb image
+        image_quality = 95
+        image_path_to_save_reduced_quality_normal_image_rgb = rgb_image_url[:-4] + ".jpg"
+        cv2.imwrite(image_path_to_save_reduced_quality_normal_image_rgb, normal_image_rgb_cv2, [int(cv2.IMWRITE_JPEG_QUALITY), image_quality])
+        # Generate ela image
+        reduced_quality_normal_image_rgb = Image.open(rgb_image_url[:-4] + ".jpg")
+        ela_image = ImageChops.difference(normal_image_rgb_plt, reduced_quality_normal_image_rgb)
+        minimum_and_maximum_pixel_values_of_each_image_channel = ela_image.getextrema()
+        maximum_image_pixel_value = max([maximum_image_channel_pixel_value[1] for maximum_image_channel_pixel_value in minimum_and_maximum_pixel_values_of_each_image_channel])
+        if maximum_image_pixel_value == 0:
+            maximum_image_pixel_value = 1
+        brightness_amplification_factor = 3
+        maximum_brightness_value = 255.0
+        image_brightness_enhancement_factor = (maximum_brightness_value / maximum_image_pixel_value) * brightness_amplification_factor
+        enhanced_ela_image = ImageEnhance.Brightness(ela_image).enhance(image_brightness_enhancement_factor)
+        # Save and read ela image
+        enhanced_ela_image.save(rgb_image_url[:-4] + ".jpg")
+        enhanced_ela_image = cv2.imread(rgb_image_url[:-4] + ".jpg")
+        return enhanced_ela_image
