@@ -301,10 +301,11 @@ class LimeImageExplainer(object):
         return data, np.array(labels)
     
     def generate_input_1_data(self, image_collection):
-        for image_data in range(image_collection.shape[0]):
+        for image_data_index in range(image_collection.shape[0]):
             # Resize and save rgb image
+            rgb_image_url = "/content/drive/MyDrive/" + str(image_data_index)
             normal_image_rgb_cv2 = cv2.imread(rgb_image_url)
-            resized_normal_image_rgb_cv2 = cv2.resize(normal_image_rgb_cv2, (image_width, image_height))
+            resized_normal_image_rgb_cv2 = cv2.resize(normal_image_rgb_cv2, (self.image_width, self.image_height))
             cv2.imwrite(rgb_image_url, resized_normal_image_rgb_cv2)
             # Read rgb image using cv2 and plt libraries
             normal_image_rgb_cv2 = cv2.imread(rgb_image_url)
