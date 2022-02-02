@@ -13,6 +13,10 @@ from tqdm.auto import tqdm
 from tensorflow.keras.applications import EfficientNetB0
 from tensorflow.keras import models
 
+from PIL import Image, ImageChops, ImageEnhance, ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+import cv2
+
 
 from . import lime_base
 from .wrappers.scikit_image import SegmentationAlgorithm
@@ -302,8 +306,11 @@ class LimeImageExplainer(object):
     
     def generate_input_1_data(self, image_collection):
         for image_data_index in range(image_collection.shape[0]):
+            rgb_image_url = "/content/drive/MyDrive/" + "image_" + str(image_data_index)
+            rgb_image_url = rgb_image_url + ".jpg"
+            image_path_to_save_image_data = rgb_image_url
+            cv2.imwrite(image_path_to_save_image_data, image_data)
             # Resize and save rgb image
-            rgb_image_url = "/content/drive/MyDrive/" + str(image_data_index)
             normal_image_rgb_cv2 = cv2.imread(rgb_image_url)
             resized_normal_image_rgb_cv2 = cv2.resize(normal_image_rgb_cv2, (self.image_width, self.image_height))
             cv2.imwrite(rgb_image_url, resized_normal_image_rgb_cv2)
@@ -312,10 +319,10 @@ class LimeImageExplainer(object):
             normal_image_rgb_plt = Image.open(rgb_image_url)
             # Generate and save reduced quality rgb image
             image_quality = 95
-            image_path_to_save_reduced_quality_normal_image_rgb = rgb_image_url[:-4] + ".jpg"
+            image_path_to_save_reduced_quality_normal_image_rgb = rgb_image_url
             cv2.imwrite(image_path_to_save_reduced_quality_normal_image_rgb, normal_image_rgb_cv2, [int(cv2.IMWRITE_JPEG_QUALITY), image_quality])
             # Generate ela image
-            reduced_quality_normal_image_rgb = Image.open(rgb_image_url[:-4] + ".jpg")
+            reduced_quality_normal_image_rgb = Image.open(rgb_image_url)
             ela_image = ImageChops.difference(normal_image_rgb_plt, reduced_quality_normal_image_rgb)
             minimum_and_maximum_pixel_values_of_each_image_channel = ela_image.getextrema()
             maximum_image_pixel_value = max([maximum_image_channel_pixel_value[1] for maximum_image_channel_pixel_value in minimum_and_maximum_pixel_values_of_each_image_channel])
@@ -326,6 +333,6 @@ class LimeImageExplainer(object):
             image_brightness_enhancement_factor = (maximum_brightness_value / maximum_image_pixel_value) * brightness_amplification_factor
             enhanced_ela_image = ImageEnhance.Brightness(ela_image).enhance(image_brightness_enhancement_factor)
             # Save and read ela image
-            enhanced_ela_image.save(rgb_image_url[:-4] + ".jpg")
-            enhanced_ela_image = cv2.imread(rgb_image_url[:-4] + ".jpg")
+            enhanced_ela_image.save(rgb_image_url)
+            enhanced_ela_image = cv2.imread(rgb_image_url)
             return enhanced_ela_image
