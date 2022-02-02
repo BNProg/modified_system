@@ -139,7 +139,10 @@ class LimeImageExplainer(object):
         self.input_image_shape = (self.image_height, self.image_width, self.image_channels)
         self.EfficientNetB0_layer = EfficientNetB0(weights = "imagenet", include_top = True, input_shape = self.input_image_shape)
         self.EfficientNetB0_model = models.Model(self.EfficientNetB0_layer.input, self.EfficientNetB0_layer.layers[-3].output)
-
+        self.model_input_1_data_samples_number = 1280
+        self.rgb_image_data = []
+        self.ela_image_data = []
+        
     def explain_instance(self, image, classifier_fn, labels=(1,),
                          hide_color=None,
                          top_labels=5, num_features=100000, num_samples=1000,
@@ -305,7 +308,9 @@ class LimeImageExplainer(object):
         return data, np.array(labels)
     
     def generate_input_1_data(self, image_collection):
-        for image_data_index in range(image_collection.shape[0]):
+        images_number = image_collection.shape[0]
+        model_input_1 = np.empty((images_number, self.model_input_1_data_samples_number))
+        for image_data_index in range(images_number):
             rgb_image_url = "/content/drive/MyDrive/" + "image_" + str(image_data_index)
             rgb_image_url = rgb_image_url + ".jpg"
             image_path_to_save_image_data = rgb_image_url
@@ -335,4 +340,8 @@ class LimeImageExplainer(object):
             # Save and read ela image
             enhanced_ela_image.save(rgb_image_url)
             enhanced_ela_image = cv2.imread(rgb_image_url)
+            model_input_1[image_data_index,:] = convert_image_to_numerical_vector_using_EfficientB0_for_multi_model(ela_image_corresponding_to_tweet_text)
+
+            self.rgb_image_data.append(resized_normal_image_rgb_cv2)
+            self.ela_image_data.append(enhanced_ela_image)
             return enhanced_ela_image
