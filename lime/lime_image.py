@@ -340,8 +340,14 @@ class LimeImageExplainer(object):
             # Save and read ela image
             enhanced_ela_image.save(rgb_image_url)
             enhanced_ela_image = cv2.imread(rgb_image_url)
-            model_input_1[image_data_index,:] = convert_image_to_numerical_vector_using_EfficientB0_for_multi_model(ela_image_corresponding_to_tweet_text)
-
+            model_input_1[image_data_index,:] = self.generate_model_input_1_data(enhanced_ela_image)
             self.rgb_image_data.append(resized_normal_image_rgb_cv2)
             self.ela_image_data.append(enhanced_ela_image)
             return enhanced_ela_image
+        
+      def generate_model_input_1_data(ela_image):
+        ela_image = ela_image[np.newaxis, ...]
+        EfficientNetB0_model_output = self.EfficientNetB0_model(ela_image)
+        EfficientNetB0_model_output = EfficientNetB0_model_output.numpy()
+        EfficientNetB0_model_output = np.squeeze(np.asarray(EfficientNetB0_model_output))
+        return EfficientNetB0_model_output
