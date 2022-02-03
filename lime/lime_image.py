@@ -350,14 +350,14 @@ class LimeImageExplainer(object):
             self.ela_image_data.append(enhanced_ela_image)
             return enhanced_ela_image
         
-    def generate_model_input_1_data(ela_image):
+    def generate_model_input_1_data(self, ela_image):
         ela_image = ela_image[np.newaxis, ...]
         EfficientNetB0_model_output = self.EfficientNetB0_model(ela_image)
         EfficientNetB0_model_output = EfficientNetB0_model_output.numpy()
         EfficientNetB0_model_output = np.squeeze(np.asarray(EfficientNetB0_model_output))
         return EfficientNetB0_model_output
     
-    def process_model_input_2_data(image_collection, text_data):
+    def process_model_input_2_data(self, image_collection, text_data):
         images_number = image_collection.shape[0]
         processed_text_data = np.zeros((images_number, text_data.shape[0]))
         for text_data_index in range(images_number):
