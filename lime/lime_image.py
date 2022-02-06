@@ -146,6 +146,7 @@ class LimeImageExplainer(object):
         self._input_2_dim = None
         self.first_position_location = None
         self.second_position_location = None
+        self.model_preds = []
 
         
     def explain_instance(self, image, classifier_fn, labels=(1,),
@@ -304,6 +305,7 @@ class LimeImageExplainer(object):
                     #preds = classifier_fn([input_1, input_2])
                     labels.extend(preds)
                     imgs = [] 
+                    self.model_preds.append(preds)
         if len(imgs) > 0:
                 if self.model_type is None:
                     self.image_sequences = np.array(imgs)
