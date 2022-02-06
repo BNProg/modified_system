@@ -144,6 +144,9 @@ class LimeImageExplainer(object):
         self.ela_image_data = []
         self.input_1_dim = None
         self._input_2_dim = None
+        self.first_position_location = None
+        self.second_position_location = None
+
         
     def explain_instance(self, image, classifier_fn, labels=(1,),
                          hide_color=None,
@@ -291,6 +294,7 @@ class LimeImageExplainer(object):
                     labels.extend(preds)
                     imgs = []
                 else:
+                    self.first_position_location = "true"
                     self.image_sequences = np.array(imgs)
                     model_input_1 = self.generate_input_1_data(np.array(imgs))
                     model_input_2 = self.process_model_input_2_data(np.array(imgs), text)
@@ -307,6 +311,7 @@ class LimeImageExplainer(object):
                     #preds = classifier_fn(np.array(imgs))
                     labels.extend(preds)
                 else:
+                    self.second_position_location = "true"
                     self.image_sequences = np.array(imgs)
                     model_input_1 = self.generate_input_1_data(np.array(imgs))
                     model_input_2 = self.process_model_input_2_data(np.array(imgs), text)
