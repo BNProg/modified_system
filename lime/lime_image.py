@@ -353,7 +353,7 @@ class LimeImageExplainer(object):
             maximum_image_pixel_value = max([maximum_image_channel_pixel_value[1] for maximum_image_channel_pixel_value in minimum_and_maximum_pixel_values_of_each_image_channel])
             if maximum_image_pixel_value == 0:
                 maximum_image_pixel_value = 1
-            brightness_amplification_factor = 0.5
+            brightness_amplification_factor = 3
             maximum_brightness_value = 255.0
             image_brightness_enhancement_factor = (maximum_brightness_value / maximum_image_pixel_value) * brightness_amplification_factor
             enhanced_ela_image = ImageEnhance.Brightness(ela_image).enhance(image_brightness_enhancement_factor)
