@@ -143,7 +143,7 @@ class LimeImageExplainer(object):
         self.rgb_image_data = []
         self.ela_image_data = []
         self.input_1_dim = []
-        self._input_2_dim = []
+        self.input_2_dim = []
         self.first_position_location = None
         self.second_position_location = None
         self.model_preds = []
