@@ -362,7 +362,7 @@ class LimeImageExplainer(object):
             model_input_1[image_data_index,:] = self.generate_model_input_1_data(enhanced_ela_image)
             self.rgb_image_data.append(resized_normal_image_rgb_cv2)
             self.ela_image_data.append(enhanced_ela_image)
-            return model_input_1
+        return model_input_1
         
     def generate_model_input_1_data(self, ela_image):
         ela_image = ela_image[np.newaxis, ...]
