@@ -142,8 +142,8 @@ class LimeImageExplainer(object):
         self.model_input_1_data_samples_number = 1280
         self.rgb_image_data = []
         self.ela_image_data = []
-        self.input_1_dim = None
-        self._input_2_dim = None
+        self.input_1_dim = []
+        self._input_2_dim = []
         self.first_position_location = None
         self.second_position_location = None
         self.model_preds = []
@@ -301,10 +301,9 @@ class LimeImageExplainer(object):
                     self.image_sequences = np.array(imgs)
                     model_input_1 = self.generate_input_1_data(np.array(imgs))
                     model_input_2 = self.process_model_input_2_data(np.array(imgs), text)
-                    self.input_1_dim = model_input_1
-                    self.input_2_dim = model_input_2
+                    self.input_1_dim.append(model_input_1)
+                    self.input_2_dim.append(model_input_2)
                     preds = classifier_fn([model_input_1, model_input_2]) 
-                    #preds = classifier_fn([input_1, input_2])
                     labels.extend(preds)
                     imgs = [] 
                     self.model_preds.append(preds)
